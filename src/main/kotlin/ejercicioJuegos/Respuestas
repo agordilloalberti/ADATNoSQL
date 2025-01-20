@@ -1,0 +1,26 @@
+2. Teoría. Responde, usando tus palabras, a las siguientes
+preguntas.
+
+a) ¿Qué ventajas e inconvenientes encuentras al usar una base de
+datos documental con MongoDB?
+
+La mayor ventaja que yo he usado es la facilidad para obtener los datos de forma compactada por documentos
+
+Los inconvenientes que he tenido han sido el obsesivo control de errores gramaticales para evitar tener documento inalcanzables,
+asi como la imposibilidad de obtener unicamente un solo resultado de forma simple
+
+
+b) ¿Cuáles han sido los principales problemas que has tenido al
+desarrollar la aplicación?
+
+El unico problema, si se me permite llamarlo asi, es el obsesivo control de errores gramaticales
+para evitar tener documento inalcanzables segun que funciones quiera usar
+
+
+c) ¿Cómo solucionarías el problema de la inconsistencia de datos
+en una base de datos documental? (El hecho de que en los
+documentos de una colección no sea obligatorio seguir un
+esquema único)
+
+Este problema lo he vislumbrado durante mi tiempo programando, mi solución ha sido crear valores por defecto para cada campo
+a la hora de la creación y de la edición,

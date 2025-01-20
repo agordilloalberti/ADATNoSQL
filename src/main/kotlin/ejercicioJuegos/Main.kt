@@ -8,7 +8,11 @@ import io.github.cdimascio.dotenv.dotenv
 import myPrintln
 import org.bson.Document
 import son
+import kotlin.math.absoluteValue
 
+/**
+ * Función main al uso la cual inicia la conexión con MongoDB y obtiene la colección correspondiente
+ */
 private fun main() {
     val dotenv = dotenv()
 
@@ -23,6 +27,9 @@ private fun main() {
     ejercicio(collection)
 }
 
+/**
+ * Función encargada de mostrar el menu y llamar a la función correspondiente según la selección del usuario
+ */
 private fun ejercicio(collection: MongoCollection<Document>) {
     println("Bienvenido a la app de videojuegos de Álvaro Gordillo Suano")
     var op:String
@@ -69,6 +76,9 @@ private fun ejercicio(collection: MongoCollection<Document>) {
     }while (op!="0")
 }
 
+/**
+ *Función encargada de listar todos los juegos insertados en la base de datos
+ */
 private fun listar(collection: MongoCollection<Document>){
     val everything = collection.find()
 
@@ -77,6 +87,9 @@ private fun listar(collection: MongoCollection<Document>){
     }
 }
 
+/**
+ * Función encargada de buscar todos los juegos que tengan el género seleccionado por el usuario
+ */
 private fun busquedaPorGenero(collection: MongoCollection<Document>): List<String> {
     println("Introduzca el genero a buscar")
     val genero = readln()
@@ -94,11 +107,16 @@ private fun busquedaPorGenero(collection: MongoCollection<Document>): List<Strin
     return resultados.toList()
 }
 
+/**
+ * Función encargada de añadir los juegos a la base de datos
+ */
 private fun añadirJuego(collection: MongoCollection<Document>){
 
     var titulo: String
 
     println("Escriba el titulo del juego")
+
+    //Este loop obliga al usuario a introducir un título de juego el cual no este ya presente
     do {
         titulo = readln()
         val filtro = Filters.eq("titulo",titulo)
@@ -108,6 +126,7 @@ private fun añadirJuego(collection: MongoCollection<Document>){
         }
     }while(busqueda.isNotEmpty())
 
+    //Para mayor simplicidad de código y navegación en la base de datos los campos nunca quedan vacíos o nulos
     var genero = "SinGenero"
     if(son("¿Desea añadir genero al juego?")) {
         println("Escriba el genero del juego")
@@ -124,9 +143,12 @@ private fun añadirJuego(collection: MongoCollection<Document>){
                 println("Debe introducir un valor válido")
             }
         }while (checkDouble(precioS)==null)
-        precio=precioS.toDouble()
+
+        //Se obliga al precio a ser positivo
+        precio=precioS.toDouble().absoluteValue
     }
 
+    //Este proceso asegura que la fecha mantiene siempre el mismo formato e impide errores
     var fechaLanz = "0/0/0"
     if(son("¿Desea añadir fecha de lanzamiento al juego?")) {
         println("Escriba el año de lanzamiento")
@@ -149,6 +171,9 @@ private fun añadirJuego(collection: MongoCollection<Document>){
     println("Se ha añadido el juego $titulo")
 }
 
+/**
+ * Función encargada de eliminar los juegos del género seleccionado por el usuario
+ */
 private fun eliminarPorGenero(collection: MongoCollection<Document>){
     println("Introduzca el genero a borrar")
 
@@ -173,6 +198,9 @@ private fun eliminarPorGenero(collection: MongoCollection<Document>){
 
 }
 
+/**
+ * Función encargada de buscar el juego a modificar y de gestionar los errores que puedan surgir
+ */
 private fun modificarJuego(collection: MongoCollection<Document>){
     println("Escriba el titulo del juego")
 
@@ -189,7 +217,14 @@ private fun modificarJuego(collection: MongoCollection<Document>){
 
     if (son("¿Desea actualizar el titulo?")){
         println("Escriba el nuevo titulo")
-        titulo=readln()
+        do {
+            titulo = readln()
+            val filtro = Filters.eq("titulo",titulo)
+            val busqueda = collection.find(filtro).toList()
+            if (busqueda.isNotEmpty()) {
+                println("No es posible añadir dos juegos con el mismo titulo, escriba un titulo diferente")
+            }
+        }while(busqueda.isNotEmpty())
     }
 
     var genero = orDoc.getString("genero")
@@ -208,9 +243,12 @@ private fun modificarJuego(collection: MongoCollection<Document>){
                 println("Debe introducir un valor válido")
             }
         }while (checkDouble(precioS)!=null)
-        precio=precioS.toDouble()
+
+        //Se obliga al precio a ser positivo
+        precio=precioS.toDouble().absoluteValue
     }
 
+    //Este proceso asegura que la fecha mantiene siempre el mismo formato e impide errores
     var fechaLanz = orDoc.getString("fechaLanzamiento")
     if (son("¿Desea actualizar la fecha de lanzamiento?")){
         println("Escriba el nuevo año de lanzamiento")

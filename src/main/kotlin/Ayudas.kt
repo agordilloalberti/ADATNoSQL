@@ -1,5 +1,6 @@
-import kotlin.math.absoluteValue
-
+/**
+ * Función encargada de dar formato al string dado, esta pensada para recibir un String proveniente de un Document
+ */
 fun myPrintln(s: String){
     var r = "|"
     var string = s.split(",")
@@ -15,15 +16,21 @@ fun myPrintln(s: String){
     println(r)
 }
 
+/**
+ * Función encargada de imprimir un mensaje y devolver un booleano según el input del usuario
+ */
 fun son(text:String): Boolean{
     println("$text (s/n)")
     return readln().lowercase()=="s"
 }
 
+/**
+ *Función encargada de recibir un String y comprobar si es posible convertir a Double o no
+ */
 fun checkDouble(s: String): Double?{
     return try {
-        s.toDouble().absoluteValue
-    }catch (e: Exception){
+        s.toDouble()
+    }catch (_: Exception){
         null
     }
 }
