@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     implementation("org.mongodb:mongodb-driver-sync:5.2.1")
-    runtimeOnly("io.github.cdimascio:dotenv-kotlin:6.4.2")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.2")
     testImplementation(kotlin("test"))
 }
 
