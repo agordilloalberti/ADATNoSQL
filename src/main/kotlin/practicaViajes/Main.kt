@@ -11,16 +11,12 @@ import son
 private fun main(){
     val dotenv = dotenv()
 
-    //Accedemos a la variable guardada
     val urlConnectionMongo = dotenv["URL_MONGODB"] ?: "error"
 
-    //Conectamos con mongo
     val cluster = MongoClients.create(urlConnectionMongo)
 
-    //Accedemos a la base de datos
     val db = cluster.getDatabase("ADATPrueba")
 
-    //Obtenemos la colección
     val collection = db.getCollection("Viajes")
 
     viajes(collection)
