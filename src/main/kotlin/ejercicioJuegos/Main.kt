@@ -98,23 +98,23 @@ private fun añadirJuego(collection: MongoCollection<Document>){
 
     var titulo: String
 
+    println("Escriba el titulo del juego")
     do {
-        println("Escriba el titulo del juego")
         titulo = readln()
         val filtro = Filters.eq("titulo",titulo)
         val busqueda = collection.find(filtro).toList()
         if (busqueda.isNotEmpty()) {
-            println("No es posible añadir dos juegos con el mismo titulo")
+            println("No es posible añadir dos juegos con el mismo titulo, escriba un titulo diferente")
         }
     }while(busqueda.isNotEmpty())
 
-    val genero: String
+    var genero = ""
     if(son("¿Desea añadir genero al juego?")) {
         println("Escriba el genero del juego")
         genero = readln()
     }
 
-    var precio: Double
+    var precio = 0.0
     if(son("¿Desea añadir precio al juego?")) {
         var precioS : String?
         do {
@@ -127,7 +127,7 @@ private fun añadirJuego(collection: MongoCollection<Document>){
         precio=precioS.toDouble()
     }
 
-    val fechaLanz: String
+    var fechaLanz = ""
     if(son("¿Desea añadir fecha de lanzamiento al juego?")) {
         println("Escriba el año de lanzamiento")
         val año = readln()
@@ -138,12 +138,100 @@ private fun añadirJuego(collection: MongoCollection<Document>){
 
         fechaLanz="$dia/$mes/$año"
     }
+
+    val doc = Document()
+        .append("titulo",titulo)
+        .append("genero",genero)
+        .append("precio",precio)
+        .append("fechaLanzamiento",fechaLanz)
+
+    collection.insertOne(doc)
+    println("Se ha añadido el juego $titulo")
 }
 
 private fun eliminarPorGenero(collection: MongoCollection<Document>){
+    println("Introduzca el titulo del juego")
+
+    val genero = readln()
+
+    val filtro = Filters.eq("genero",genero)
+
+    val busqueda = collection.find(filtro).toList()
+
+    if (busqueda.isEmpty()) {
+        println("No se ha encontrado el genero que busca.")
+        return
+    }
+
+    val delResult = collection.deleteMany(filtro)
+
+    if (delResult.deletedCount>0){
+        println("Se ha borrado correctamente todo el genero $genero")
+    }else{
+        println("Ha ocurrido un error al borrar")
+    }
 
 }
 
 private fun modificarJuego(collection: MongoCollection<Document>){
+    println("Escriba el titulo del juego")
 
+    var titulo = readln()
+
+    val filtro = Filters.eq("titulo",titulo)
+    val busqueda = collection.find(filtro).toList()
+    if (busqueda.isEmpty()) {
+        println("No se ha encontrado el juego $titulo")
+        return
+    }
+
+    val orDoc: Document = busqueda[0]
+
+    if (son("¿Desea actualizar el titulo?")){
+        println("Escriba el nuevo titulo")
+        titulo=readln()
+    }
+
+    var genero = orDoc.getString("genero")
+    if (son("¿Desea actualizar el genero?")){
+        println("Escriba el nuevo genero")
+        genero = readln()
+    }
+
+    var precio = orDoc.getDouble("precio")
+    if (son("¿Desea actualizar el precio?")){
+        var precioS : String?
+        do {
+            println("Escriba el nuevo precio")
+            precioS = readln()
+            if (checkDouble(precioS)==null){
+                println("Debe introducir un valor válido")
+            }
+        }while (checkDouble(precioS)!=null)
+        precio=precioS.toDouble()
+    }
+
+    var fechaLanz = orDoc.getString("fechaLanzamiento")
+    if (son("¿Desea actualizar la fecha de lanzamiento?")){
+        println("Escriba el nuevo año de lanzamiento")
+        val año = readln()
+        println("Escriba el nuevo mes de lanzamiento")
+        val mes = readln()
+        println("Escriba el nuevo dia de lanzamiento")
+        val dia = readln()
+
+        fechaLanz="$dia/$mes/$año"
+    }
+
+    val doc = Document()
+        .append("titulo",titulo)
+        .append("genero",genero)
+        .append("precio",precio)
+        .append("fechaLanzamiento",fechaLanz)
+
+    val docum = Document("\$set",doc)
+
+    collection.updateOne(filtro,docum)
+
+    println("Se ha actualizado la infomación del juego $titulo")
 }

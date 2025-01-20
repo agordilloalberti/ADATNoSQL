@@ -43,10 +43,10 @@ private fun viajes(collection: MongoCollection<Document>){
             }
             "3" -> {
                 println("Ha seleccionado buscar un viaje")
-                val l =buscarReserva(collection)
-                for (s in l){
-                    myPrintln(s)
-                }
+//                val l =buscarReserva(collection)
+//                for (s in l){
+//                    myPrintln(s)
+//                }
             }
             "4" -> {
                 println("Ha seleccionado editar una reserva de viaje")
