@@ -108,7 +108,7 @@ private fun añadirJuego(collection: MongoCollection<Document>){
         }
     }while(busqueda.isNotEmpty())
 
-    var genero = ""
+    var genero = "SinGenero"
     if(son("¿Desea añadir genero al juego?")) {
         println("Escriba el genero del juego")
         genero = readln()
@@ -123,11 +123,11 @@ private fun añadirJuego(collection: MongoCollection<Document>){
             if (checkDouble(precioS)==null){
                 println("Debe introducir un valor válido")
             }
-        }while (checkDouble(precioS)!=null)
+        }while (checkDouble(precioS)==null)
         precio=precioS.toDouble()
     }
 
-    var fechaLanz = ""
+    var fechaLanz = "0/0/0"
     if(son("¿Desea añadir fecha de lanzamiento al juego?")) {
         println("Escriba el año de lanzamiento")
         val año = readln()
@@ -150,7 +150,7 @@ private fun añadirJuego(collection: MongoCollection<Document>){
 }
 
 private fun eliminarPorGenero(collection: MongoCollection<Document>){
-    println("Introduzca el titulo del juego")
+    println("Introduzca el genero a borrar")
 
     val genero = readln()
 
