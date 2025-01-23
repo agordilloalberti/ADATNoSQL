@@ -1,0 +1,5 @@
+Queremos diseñar un blog de noticias donde los usuarios registrados puedan publicar sus comentarios.
+
+Cada Usuario tien un nombre, un nick, un email, un estado, una dirección y uno o varios teléfonos.
+
+Las noticias tiene titulo, cuerpo, fecha de publicación, son publicadas por un Usuario y pueden contener o no una lista de tags.

@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.mongodb:mongodb-driver-sync:5.2.1")
+    implementation("org.mongodb:mongodb-driver-kotlin-sync:5.3.0")
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.2")
     testImplementation(kotlin("test"))
 }
