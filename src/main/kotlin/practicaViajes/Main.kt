@@ -4,7 +4,7 @@ import com.mongodb.client.MongoClients
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
 import io.github.cdimascio.dotenv.dotenv
-import myPrintln
+import documentReformat
 import org.bson.Document
 import son
 
@@ -140,6 +140,6 @@ private fun reservas(c: MongoCollection<Document>){
     val docConsulta = c.find()
 
     for (d in docConsulta) {
-        myPrintln(d.toString())
+        documentReformat(d.toString())
     }
 }

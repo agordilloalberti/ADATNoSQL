@@ -4,9 +4,9 @@ import com.mongodb.client.MongoDatabase
 import io.github.cdimascio.dotenv.dotenv
 
 /**
- * Función encargada de dar formato al string dado, esta pensada para recibir un String proveniente de un Document
+ * Función encargada de dar formato al string dado, está pensada para recibir un String proveniente de un Document
  */
-fun myPrintln(s: String){
+fun documentReformat(s: String) : String{
     var r = "|"
     var string = s.split(",")
     string = string.drop(1)
@@ -18,14 +18,26 @@ fun myPrintln(s: String){
         r+=iS[0].trim()+" : "+iS[1].trim()+" |- - -| "
     }
     r = r.dropLast(7)
-    println(r)
+    return r
+}
+
+/**
+ * Función encargada de solicitar un dato de tipo string y asegurarse de que el usuario está conforme con su respuesta
+ */
+fun pedirDatoSimple(text: String): String{
+    var r: String
+    do {
+        println(text)
+        r = readln()
+    }while (!son("\"$r\""))
+    return r
 }
 
 /**
  * Función encargada de imprimir un mensaje y devolver un booleano según el input del usuario
  */
 fun son(text:String): Boolean{
-    println("$text (s/n)")
+    println("$text ¿es correcto? (s/n)")
     return readln().lowercase()=="s"
 }
 

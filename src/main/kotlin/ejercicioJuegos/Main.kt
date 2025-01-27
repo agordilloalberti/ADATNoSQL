@@ -4,8 +4,8 @@ import checkDouble
 import com.mongodb.client.MongoClients
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
+import documentReformat
 import io.github.cdimascio.dotenv.dotenv
-import myPrintln
 import org.bson.Document
 import son
 import kotlin.math.absoluteValue
@@ -51,7 +51,7 @@ private fun ejercicio(collection: MongoCollection<Document>) {
                 println("Ha seleccionado buscar por genero")
                 val resultados = busquedaPorGenero(collection)
                 for (resultado in resultados) {
-                    myPrintln(resultado)
+                    documentReformat(resultado)
                 }
             }
             "3" -> {
@@ -83,7 +83,7 @@ private fun listar(collection: MongoCollection<Document>){
     val everything = collection.find()
 
     for (juego in everything){
-        myPrintln(juego.toString())
+        documentReformat(juego.toString())
     }
 }
 

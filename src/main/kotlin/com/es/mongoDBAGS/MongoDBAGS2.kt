@@ -3,7 +3,7 @@ package com.es.mongoDBAGS
 import com.mongodb.client.MongoClients
 import com.mongodb.client.model.Filters
 import io.github.cdimascio.dotenv.dotenv
-import myPrintln
+import documentReformat
 import org.bson.Document
 
 fun main() {
@@ -36,7 +36,7 @@ fun main() {
     val busqueda = collection.find(filtroPorNombre)
 
     //Escribimos por pantalla los resultados
-    busqueda.forEach{myPrintln(it.toString())}
+    busqueda.forEach{documentReformat(it.toString())}
 
     //Realizamos una consulta
 //    val docConsulta = collection.find()

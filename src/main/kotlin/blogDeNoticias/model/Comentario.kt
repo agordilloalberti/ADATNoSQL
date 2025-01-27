@@ -3,8 +3,10 @@ package blogDeNoticias.model
 import java.util.*
 
 data class Comentario(
-    var fecha: Date,
-    var comentario: String,
-    var usuarioId: String,
-    var noticia: Noticia
+    //el campo "username" del usuario que ha escrito la noticia
+    val usuario: String,
+    //La noticia sobre la que se escribió el comentario
+    val noticia: Noticia,
+    val comentario: String,
+    val fecha: Date
 )
