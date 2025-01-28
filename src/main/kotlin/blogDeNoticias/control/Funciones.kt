@@ -27,9 +27,9 @@ fun publicar(usersColl: MongoCollection<Usuario>, noticiasColl: MongoCollection<
 
     println("¿Desea añadir tags? (s/n)")
     var op = readln()
-    while (op!="n"){
+    while (op.lowercase()!="n"){
 
-        val tag = pedirDatoSimple("Introduzca el tag")
+        val tag = pedirDatoSimple("Introduzca el tag").lowercase()
 
         tags.add(tag)
 
@@ -43,9 +43,24 @@ fun publicar(usersColl: MongoCollection<Usuario>, noticiasColl: MongoCollection<
     noticiasColl.insertOne(noticia)
 }
 
-//TODO
-fun comentar(usersColl: MongoCollection<Usuario>, noticiasColl: MongoCollection<Noticia>) {
+fun comentar(usersColl: MongoCollection<Usuario>,noticiasColl: MongoCollection<Noticia>,comentariosColl: MongoCollection<Comentario>) {
 
+    val user = buscarUserPorUsername(usersColl)
+
+    if (!user.estado){
+        println("El usuario ${user.username} no tiene permitido comentar")
+        return
+    }
+
+    val noticia = buscarNoticiaPorTitulo(noticiasColl)
+
+    val comentarioText = pedirDatoSimple("Escriba su comentario")
+
+    val comentario = Comentario(user.username,noticia,comentarioText)
+
+    comentariosColl.insertOne(comentario)
+
+    println("Se ha añadido su comentario")
 }
 
 fun registrar(usersColl: MongoCollection<Usuario>) {
@@ -75,7 +90,7 @@ fun registrar(usersColl: MongoCollection<Usuario>) {
     var telefonos = mutableListOf<String>()
     println("¿Desea añadir telefonos?")
     var op = readln()
-    while (op!="n") {
+    while (op.lowercase()!="n") {
 
         var tel = pedirDatoSimple("Introduzca el numero")
 
@@ -130,9 +145,44 @@ fun listarComentarios(noticiasColl: MongoCollection<Noticia>, comentariosColl: M
     }
 }
 
-//TODO
 fun buscarPorEtiquetas(noticiasColl: MongoCollection<Noticia>) {
+    val noticias = noticiasColl.find()
 
+    val tags = mutableListOf<String>()
+
+    do {
+        var tag = pedirDatoSimple("Introduzca la etiqueta").lowercase()
+        tags.add(tag)
+        println("¿Desea añadir mas etiquetas? (s/n)")
+        val op = readln().lowercase()
+    }while (op.lowercase()!="n")
+
+    val buscadas = mutableListOf<Noticia>()
+
+    for (noticia in noticias){
+
+        var buscada = true
+
+        for (tag in tags){
+            if (!noticia.tags.contains(tag)){
+                buscada=false
+                break
+            }
+        }
+
+        if (buscada){
+            buscadas.add(noticia)
+        }
+    }
+
+    if (buscadas.isEmpty()){
+        println("No hay noticias con las etiquetas seleccionadas")
+    }else{
+        println("La/s noticia/s que contiene/n las etiquetas son:")
+        for (noticia in buscadas){
+            println(noticia)
+        }
+    }
 }
 
 fun listarUltimas(noticiasColl: MongoCollection<Noticia>) {
@@ -148,46 +198,51 @@ fun listarUltimas(noticiasColl: MongoCollection<Noticia>) {
 //Extras
 
 fun buscarNoticiaPorTitulo(noticiasColl: MongoCollection<Noticia>) : Noticia{
-    var titulo = pedirDatoSimple("Introduzca el titulo de la noticia")
-
-    var filtro = Filters.eq("titulo",titulo)
-
-    val busqueda = noticiasColl.find(filtro).toList()
 
     var noticia: Noticia? = null
 
-    if (busqueda.isEmpty()){
+    do {
+        var titulo = pedirDatoSimple("Introduzca el titulo de la noticia")
 
-        println("No se han encontrado noticias con ese titulo")
+        var filtro = Filters.eq("titulo",titulo)
 
-    }else if(busqueda.size==1){
+        val busqueda = noticiasColl.find(filtro).toList()
 
-        noticia = busqueda[0]
 
-    }else{
+        if (busqueda.isEmpty()){
 
-        println("Se han encontrado varios resultados, se van a mostrar todos los resultados, seleccione cual desea")
+            println("No se han encontrado noticias con ese titulo")
 
-        for (resultado in busqueda){
-            println("1.$resultado")
-        }
+        }else if(busqueda.size==1){
 
-        var op: String
+            noticia = busqueda[0]
 
-        do {
-            println("Elija entre los resultado 1 y ${busqueda.size}")
-            op = readln()
-            try {
-                val n = op.toInt()
-                noticia=busqueda[n]
-            }catch (e: Exception){
-                println("Se ha introducido un valor no valido")
+        }else{
+
+            println("Se han encontrado varios resultados, se van a mostrar todos los resultados, seleccione cual desea")
+
+            for (resultado in busqueda){
+                println("1.$resultado")
             }
-        }while (noticia==null)
-    }
+
+            var op: String
+
+            do {
+                println("Elija entre los resultados 1 y ${busqueda.size}")
+                op = readln()
+                try {
+                    val n = op.toInt()
+                    noticia=busqueda[n]
+                }catch (e: Exception){
+                    println("Se ha introducido un valor no valido")
+                }
+            }while (noticia==null)
+        }
+    }while (noticia==null)
+
     println("Se ha seleccionado la noticia correctamente")
 
-    return noticia!!
+    return noticia
 }
 
 fun buscarUserPorUsername(usersColl: MongoCollection<Usuario>): Usuario{
@@ -201,7 +256,7 @@ fun buscarUserPorUsername(usersColl: MongoCollection<Usuario>): Usuario{
         }else{
             println("El usuario \"$username\" no existe")
         }
-    }while(busqueda.isEmpty())
+    }while(user==null)
 
-    return user!!
+    return user
 }

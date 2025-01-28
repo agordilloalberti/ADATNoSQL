@@ -7,7 +7,7 @@ import com.mongodb.client.model.Filters
 import documentReformat
 import io.github.cdimascio.dotenv.dotenv
 import org.bson.Document
-import son
+import confirmacionSobreSeleccion
 import kotlin.math.absoluteValue
 
 /**
@@ -128,13 +128,13 @@ private fun añadirJuego(collection: MongoCollection<Document>){
 
     //Para mayor simplicidad de código y navegación en la base de datos los campos nunca quedan vacíos o nulos
     var genero = "SinGenero"
-    if(son("¿Desea añadir genero al juego?")) {
+    if(confirmacionSobreSeleccion("¿Desea añadir genero al juego?")) {
         println("Escriba el genero del juego")
         genero = readln()
     }
 
     var precio = 0.0
-    if(son("¿Desea añadir precio al juego?")) {
+    if(confirmacionSobreSeleccion("¿Desea añadir precio al juego?")) {
         var precioS : String?
         do {
             println("Escriba el precio del juego (Puede usar decimales)")
@@ -150,7 +150,7 @@ private fun añadirJuego(collection: MongoCollection<Document>){
 
     //Este proceso asegura que la fecha mantiene siempre el mismo formato e impide errores
     var fechaLanz = "0/0/0"
-    if(son("¿Desea añadir fecha de lanzamiento al juego?")) {
+    if(confirmacionSobreSeleccion("¿Desea añadir fecha de lanzamiento al juego?")) {
         println("Escriba el año de lanzamiento")
         val año = readln()
         println("Escriba el mes de lanzamiento")
@@ -215,7 +215,7 @@ private fun modificarJuego(collection: MongoCollection<Document>){
 
     val orDoc: Document = busqueda[0]
 
-    if (son("¿Desea actualizar el titulo?")){
+    if (confirmacionSobreSeleccion("¿Desea actualizar el titulo?")){
         println("Escriba el nuevo titulo")
         do {
             titulo = readln()
@@ -228,13 +228,13 @@ private fun modificarJuego(collection: MongoCollection<Document>){
     }
 
     var genero = orDoc.getString("genero")
-    if (son("¿Desea actualizar el genero?")){
+    if (confirmacionSobreSeleccion("¿Desea actualizar el genero?")){
         println("Escriba el nuevo genero")
         genero = readln()
     }
 
     var precio = orDoc.getDouble("precio")
-    if (son("¿Desea actualizar el precio?")){
+    if (confirmacionSobreSeleccion("¿Desea actualizar el precio?")){
         var precioS : String?
         do {
             println("Escriba el nuevo precio")
@@ -250,7 +250,7 @@ private fun modificarJuego(collection: MongoCollection<Document>){
 
     //Este proceso asegura que la fecha mantiene siempre el mismo formato e impide errores
     var fechaLanz = orDoc.getString("fechaLanzamiento")
-    if (son("¿Desea actualizar la fecha de lanzamiento?")){
+    if (confirmacionSobreSeleccion("¿Desea actualizar la fecha de lanzamiento?")){
         println("Escriba el nuevo año de lanzamiento")
         val año = readln()
         println("Escriba el nuevo mes de lanzamiento")

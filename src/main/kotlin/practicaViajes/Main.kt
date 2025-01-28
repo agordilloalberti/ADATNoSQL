@@ -1,12 +1,13 @@
 package practicaViajes
 
+import checkDouble
 import com.mongodb.client.MongoClients
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
-import io.github.cdimascio.dotenv.dotenv
 import documentReformat
+import io.github.cdimascio.dotenv.dotenv
 import org.bson.Document
-import son
+import confirmacionSobreSeleccion
 
 private fun main(){
     val dotenv = dotenv()
@@ -68,8 +69,7 @@ private fun añadirReserva(c: MongoCollection<Document>){
     println("Escriba el destino del viaje:")
     val des = readln().lowercase()
     println("Escriba el precio del viaje:")
-    //checkDouble TODO
-    val prec = readln().toDouble()
+    val prec = checkDouble(readln())
 
     val doc = Document().append("Origen",or).append("Destino",des).append("Precio",prec)
 
@@ -116,23 +116,18 @@ private fun editarReserva(c: MongoCollection<Document>){
     var or: String? = null
     var des: String? = null
     var prec: String? = null
-    if(son("¿Desea actualizar el origen?")){
+    if(confirmacionSobreSeleccion("¿Desea actualizar el origen?")){
         println("introduzca el nuevo valor")
         or = readln()
     }
-    if (son("¿Desea actualizar el destino?")){
+    if (confirmacionSobreSeleccion("¿Desea actualizar el destino?")){
         println("introduzca el nuevo valor")
         des = readln()
     }
-    if (son("¿Desea actualizar el precio?")){
+    if (confirmacionSobreSeleccion("¿Desea actualizar el precio?")){
         println("introduzca el nuevo valor")
         prec = readln()
     }
-
-
-//TODO
-
-//  updateDocument
 
 }
 

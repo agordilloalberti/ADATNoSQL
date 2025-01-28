@@ -29,14 +29,14 @@ fun pedirDatoSimple(text: String): String{
     do {
         println(text)
         r = readln()
-    }while (!son("\"$r\""))
+    }while (!confirmacionSobreSeleccion("\"$r\""))
     return r
 }
 
 /**
  * Función encargada de imprimir un mensaje y devolver un booleano según el input del usuario
  */
-fun son(text:String): Boolean{
+fun confirmacionSobreSeleccion(text:String): Boolean{
     println("$text ¿es correcto? (s/n)")
     return readln().lowercase()=="s"
 }

@@ -5,7 +5,7 @@ import blogDeNoticias.model.Comentario
 import blogDeNoticias.model.Noticia
 import blogDeNoticias.model.Usuario
 import com.mongodb.client.MongoCollection
-import son
+import confirmacionSobreSeleccion
 
 
 fun menu(
@@ -30,42 +30,42 @@ fun menu(
         op = readln()
         when (op) {
             "1" -> {
-                if (son("Ha seleccionado: Publicar una noticia")) {
+                if (confirmacionSobreSeleccion("Ha seleccionado: Publicar una noticia")) {
                     publicar(usersColl,noticiasColl)
                 }
             }
             "2" -> {
-                if(son("Ha seleccionado: Escribir comentario")){
-                    comentar(usersColl,noticiasColl)
+                if(confirmacionSobreSeleccion("Ha seleccionado: Escribir comentario")){
+                    comentar(usersColl,noticiasColl,comentariosColl)
                 }
             }
             "3" -> {
-                if (son("Ha seleccionado: Registrar un nuevo usuario")) {
+                if (confirmacionSobreSeleccion("Ha seleccionado: Registrar un nuevo usuario")) {
                     registrar(usersColl)
                 }
             }
             "4" -> {
-                if (son("Ha seleccionado: Listar las noticias de un usuario")) {
+                if (confirmacionSobreSeleccion("Ha seleccionado: Listar las noticias de un usuario")) {
                     listarPorUser(usersColl,noticiasColl)
                 }
             }
             "5" -> {
-                if (son("Ha seleccionado: Listar los comentario de una noticia")){
+                if (confirmacionSobreSeleccion("Ha seleccionado: Listar los comentario de una noticia")){
                     listarComentarios(noticiasColl,comentariosColl)
                 }
             }
             "6" -> {
-                if (son("Ha seleccionado: Buscar noticias por etiquetas")){
+                if (confirmacionSobreSeleccion("Ha seleccionado: Buscar noticias por etiquetas")){
                     buscarPorEtiquetas(noticiasColl)
                 }
             }
             "7" -> {
-                if (son("Ha seleccionado: Listar las ultimas 10 noticias")){
+                if (confirmacionSobreSeleccion("Ha seleccionado: Listar las ultimas 10 noticias")){
                     listarUltimas(noticiasColl)
                 }
             }
             "0" -> {
-                if (son("Ha seleccionado: salir")){
+                if (confirmacionSobreSeleccion("Ha seleccionado: salir")){
                     println("Gracias por usar esta aplicación.")
                 }
             }

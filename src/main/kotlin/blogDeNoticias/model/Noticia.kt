@@ -7,6 +7,8 @@ data class Noticia(
     var titulo: String,
     var cuerpo: String,
     var user: Usuario,
-    val tag: List<String>?,
+    val tags: List<String>,
     val fechaPub: Date = Date.from(Instant.now())
 )
+
+//TODO override el toString()
