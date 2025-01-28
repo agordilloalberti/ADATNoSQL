@@ -53,6 +53,17 @@ fun checkDouble(s: String): Double?{
 }
 
 /**
+ *Función encargada de recibir un String y comprobar si es posible convertir a Int o no
+ */
+fun checkInt(s: String): Int?{
+    return try {
+        s.toInt()
+    }catch (_: Exception){
+        null
+    }
+}
+
+/**
  * Objeto para acceder a mongo más facilmente
  */
 object ConexionMongo {

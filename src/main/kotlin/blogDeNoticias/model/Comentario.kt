@@ -10,4 +10,11 @@ data class Comentario(
     val noticia: Noticia,
     val comentario: String,
     val fecha: Date = Date.from(Instant.now())
-)
+){
+    override fun toString(): String {
+        val s = "|Usuario: $usuario|- - -|Titulo de la noticia: ${noticia.titulo}" +
+                "|- - -|Comentario: $comentario|- - -|" +
+                "Fecha de publicación: $fecha|"
+        return s
+    }
+}

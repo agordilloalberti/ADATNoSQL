@@ -4,6 +4,7 @@ import blogDeNoticias.model.Comentario
 import blogDeNoticias.model.Direccion
 import blogDeNoticias.model.Noticia
 import blogDeNoticias.model.Usuario
+import checkInt
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Sorts
@@ -11,7 +12,6 @@ import pedirDatoSimple
 
 fun publicar(usersColl: MongoCollection<Usuario>, noticiasColl: MongoCollection<Noticia>) {
 
-    println("Introduzca el usuario que va a publicar")
     val user = buscarUserPorUsername(usersColl)
 
     if (!user.estado){
@@ -88,7 +88,7 @@ fun registrar(usersColl: MongoCollection<Usuario>) {
     }while(busqueda.isNotEmpty())
 
     var telefonos = mutableListOf<String>()
-    println("¿Desea añadir telefonos?")
+    println("¿Desea añadir telefonos? (s/n)")
     var op = readln()
     while (op.lowercase()!="n") {
 
@@ -99,6 +99,8 @@ fun registrar(usersColl: MongoCollection<Usuario>) {
         println("¿Desea parar de añadir telefonos? (s/n)")
         op = readln()
     }
+
+    println("Procedemos a añadir su direccion")
 
     var calle = pedirDatoSimple("Introduzca su calle")
 
@@ -115,6 +117,8 @@ fun registrar(usersColl: MongoCollection<Usuario>) {
     val user = Usuario(email,nombre,username,direccion,telefonos)
 
     usersColl.insertOne(user)
+
+    println("Se ha registrado su usuario")
 }
 
 fun listarPorUser(usersColl: MongoCollection<Usuario>, noticiasColl: MongoCollection<Noticia>) {
@@ -186,9 +190,17 @@ fun buscarPorEtiquetas(noticiasColl: MongoCollection<Noticia>) {
 }
 
 fun listarUltimas(noticiasColl: MongoCollection<Noticia>) {
+    var n: Int? = null
+    do {
+        n = checkInt(pedirDatoSimple("Introduzca el numero de noticias de ultima hora que desea"))
+        if (n==null){
+            println("Se ha introducido un valor invalido")
+        }
+    }while (n==null)
+
     noticiasColl.find()
         .sort(Sorts.descending("fechaPub"))
-        .limit(10)
+        .limit(n)
         .forEach {
             println(it)
         }

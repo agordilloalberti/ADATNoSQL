@@ -24,8 +24,7 @@ fun menu(
                 "\n4.Listar las noticias de publicadas por un usuario" +
                 "\n5.Listar los comentarios de una noticia" +
                 "\n6.Buscar noticias por etiquetas" +
-                //TODO añade que el numero sea elegible por el usuario
-                "\n7.Listar las 10 ultimas noticias publicadas" +
+                "\n7.Listar las ultimas noticias publicadas" +
                 "\n0.Salir")
         op = readln()
         when (op) {
@@ -60,7 +59,7 @@ fun menu(
                 }
             }
             "7" -> {
-                if (confirmacionSobreSeleccion("Ha seleccionado: Listar las ultimas 10 noticias")){
+                if (confirmacionSobreSeleccion("Ha seleccionado: Listar las ultimas noticias")){
                     listarUltimas(noticiasColl)
                 }
             }

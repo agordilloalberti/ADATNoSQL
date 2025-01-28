@@ -9,6 +9,11 @@ data class Noticia(
     var user: Usuario,
     val tags: List<String>,
     val fechaPub: Date = Date.from(Instant.now())
-)
-
-//TODO override el toString()
+){
+    override fun toString(): String {
+        val s = "|Titulo: $titulo|- - -|Cuerpo: $cuerpo|- - -|" +
+                "Usuario: ${user.username}|- - -|Etiquetas: $tags|- - -|" +
+                "Fecha de publicación: $fechaPub|"
+        return s
+    }
+}

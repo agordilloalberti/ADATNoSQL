@@ -9,7 +9,7 @@ import com.mongodb.client.MongoCollection
 
 fun main() {
 
-    val database = ConexionMongo.getDatabase("Noticias")
+    val database = ConexionMongo.getDatabase("BlogDeNoticias")
 
     val usersColl: MongoCollection<Usuario> = database.getCollection("Usuarios", Usuario::class.java)
 
