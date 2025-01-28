@@ -233,7 +233,7 @@ fun buscarNoticiaPorTitulo(noticiasColl: MongoCollection<Noticia>) : Noticia{
                 try {
                     val n = op.toInt()
                     noticia=busqueda[n]
-                }catch (e: Exception){
+                }catch (_: Exception){
                     println("Se ha introducido un valor no valido")
                 }
             }while (noticia==null)
