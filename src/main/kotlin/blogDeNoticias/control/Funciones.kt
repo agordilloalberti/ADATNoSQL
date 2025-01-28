@@ -140,6 +140,12 @@ fun listarComentarios(noticiasColl: MongoCollection<Noticia>, comentariosColl: M
 
     println("A continuación se muestran los comentarios:")
 
+    //TODO: arregalar este fallo ya que no realiza la comparación de forma correcta
+    //Debug
+
+    println(noticia)
+
+    //Fin debug
     val filtro = Filters.eq("Noticia", noticia)
 
     val busqueda = comentariosColl.find(filtro).toList()
