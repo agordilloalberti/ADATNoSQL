@@ -10,6 +10,10 @@ import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Sorts
 import pedirDatoSimple
 
+/**
+ * Función encargada de añadir un documento "Noticia" a la base de datos, se encarga de pedir los datos al usuario
+ * asi como de confirmar que el usuario tiene permitido esta acción.
+ */
 fun publicar(usersColl: MongoCollection<Usuario>, noticiasColl: MongoCollection<Noticia>) {
 
     val user = buscarUserPorUsername(usersColl)
@@ -40,9 +44,18 @@ fun publicar(usersColl: MongoCollection<Usuario>, noticiasColl: MongoCollection<
 
     val noticia = Noticia(titulo,cuerpo,user,tags.toList())
 
-    noticiasColl.insertOne(noticia)
+    try {
+        noticiasColl.insertOne(noticia)
+        println("Se ha publicado la noticia")
+    }catch (_: Exception){
+        println("No es posible publicar la noticia, intentelo de nuevo")
+    }
 }
 
+/**
+ * Función encargada de añadir un documento "Comentario" a la base de datos, de asegurarse que el usuario tiene permitido comentar
+ * asi como encargase de pedir los datos al usuario
+ */
 fun comentar(usersColl: MongoCollection<Usuario>,noticiasColl: MongoCollection<Noticia>,comentariosColl: MongoCollection<Comentario>) {
 
     val user = buscarUserPorUsername(usersColl)
@@ -52,7 +65,7 @@ fun comentar(usersColl: MongoCollection<Usuario>,noticiasColl: MongoCollection<N
         return
     }
 
-    val noticia = buscarNoticiaPorTitulo(noticiasColl)
+    val noticia = buscarNoticiaPorTitulo(noticiasColl)._id
 
     val comentarioText = pedirDatoSimple("Escriba su comentario")
 
@@ -63,12 +76,16 @@ fun comentar(usersColl: MongoCollection<Usuario>,noticiasColl: MongoCollection<N
     println("Se ha añadido su comentario")
 }
 
+/**
+ * Función encargada de añadir un documento "Usuario" a la base de datos, pidiendo datos al usuario y a su vez
+ * asegurándose de que tanto el email como el username no están en uso
+ */
 fun registrar(usersColl: MongoCollection<Usuario>) {
 
     var email: String
     do {
         email = pedirDatoSimple("Escriba su email")
-        val filtro = Filters.eq("username",email)
+        val filtro = Filters.eq("_id",email)
         val busqueda = usersColl.find(filtro).toList()
         if (busqueda.isNotEmpty()) {
             println("Este email ya esta en uso, escriba uno diferente")
@@ -121,6 +138,9 @@ fun registrar(usersColl: MongoCollection<Usuario>) {
     println("Se ha registrado su usuario")
 }
 
+/**
+ * Función simple que imprime todas las noticias que pertenezcan a un usuario.
+ */
 fun listarPorUser(usersColl: MongoCollection<Usuario>, noticiasColl: MongoCollection<Noticia>) {
 
     var user = buscarUserPorUsername(usersColl)
@@ -134,19 +154,16 @@ fun listarPorUser(usersColl: MongoCollection<Usuario>, noticiasColl: MongoCollec
     }
 }
 
+/**
+ * Función simple que imprime todos los comentarios que pertenezcan a una noticia
+ */
 fun listarComentarios(noticiasColl: MongoCollection<Noticia>, comentariosColl: MongoCollection<Comentario>) {
 
-    val noticia = buscarNoticiaPorTitulo(noticiasColl)
+    val noticia = buscarNoticiaPorTitulo(noticiasColl)._id
 
     println("A continuación se muestran los comentarios:")
 
-    //TODO: arregalar este fallo ya que no realiza la comparación de forma correcta
-    //Debug
-
-    println(noticia)
-
-    //Fin debug
-    val filtro = Filters.eq("Noticia", noticia)
+    val filtro = Filters.eq("noticia", noticia)
 
     val busqueda = comentariosColl.find(filtro).toList()
 
@@ -155,6 +172,9 @@ fun listarComentarios(noticiasColl: MongoCollection<Noticia>, comentariosColl: M
     }
 }
 
+/**
+ * Funcion encargada de buscar las noticias que contengan las etiquetas introducidas por el usuario.
+ */
 fun buscarPorEtiquetas(noticiasColl: MongoCollection<Noticia>) {
     val noticias = noticiasColl.find()
 
@@ -195,6 +215,9 @@ fun buscarPorEtiquetas(noticiasColl: MongoCollection<Noticia>) {
     }
 }
 
+/**
+ * Función encaragde de solicitar al usuario un número y mostrar las noticias mas recientes hasta llegar a ese número
+ */
 fun listarUltimas(noticiasColl: MongoCollection<Noticia>) {
     var n: Int? = null
     do {
@@ -215,6 +238,10 @@ fun listarUltimas(noticiasColl: MongoCollection<Noticia>) {
 
 //Extras
 
+/**
+ * Funcion extra para facilitar el backend de la aplicación, busca noticias por título y obliga al usuario a seleccionar
+ * una en caso de obtener varios resultados.
+ */
 fun buscarNoticiaPorTitulo(noticiasColl: MongoCollection<Noticia>) : Noticia{
 
     var noticia: Noticia? = null
@@ -263,6 +290,9 @@ fun buscarNoticiaPorTitulo(noticiasColl: MongoCollection<Noticia>) : Noticia{
     return noticia
 }
 
+/**
+ * Funcion extra para facilitar el backend de la aplicación, busca usuarios por username.
+ */
 fun buscarUserPorUsername(usersColl: MongoCollection<Usuario>): Usuario{
     var user: Usuario? = null
     do {

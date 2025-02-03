@@ -7,6 +7,10 @@ import blogDeNoticias.model.Noticia
 import blogDeNoticias.model.Usuario
 import com.mongodb.client.MongoCollection
 
+/**
+ * Archivo de ejecución, inicia la conexión a la base de datos, recupera las colecciones y llama al menu, una vez termine este
+ * se cierra la conexión.
+ */
 fun main() {
 
     val database = ConexionMongo.getDatabase("BlogDeNoticias")

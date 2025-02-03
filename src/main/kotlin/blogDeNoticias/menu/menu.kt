@@ -8,6 +8,9 @@ import com.mongodb.client.MongoCollection
 import confirmacionSobreSeleccion
 
 
+/**
+ * Función encargada de mostrar las opciones al usuario y llamar a las funciones correspondientes
+ */
 fun menu(
     usersColl: MongoCollection<Usuario>,
     noticiasColl: MongoCollection<Noticia>,
