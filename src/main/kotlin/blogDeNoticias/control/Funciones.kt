@@ -163,7 +163,7 @@ fun listarComentarios(noticiasColl: MongoCollection<Noticia>, comentariosColl: M
 
     println("A continuación se muestran los comentarios:")
 
-    val filtro = Filters.eq("noticia", noticia)
+    val filtro = Filters.eq("idNoticia", noticia)
 
     val busqueda = comentariosColl.find(filtro).toList()
 
@@ -222,7 +222,7 @@ fun listarUltimas(noticiasColl: MongoCollection<Noticia>) {
     var n: Int? = null
     do {
         n = checkInt(pedirDatoSimple("Introduzca el numero de noticias de ultima hora que desea"))
-        if (n==null){
+        if (n==null || n<=0){
             println("Se ha introducido un valor invalido")
         }
     }while (n==null)
