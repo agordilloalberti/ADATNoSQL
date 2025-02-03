@@ -31,7 +31,7 @@ fun pedirDatoSimple(text: String): String{
         println(text)
         r = readln()
     }while (!confirmacionSobreSeleccion("\"$r\""))
-    return r
+    return r.trim()
 }
 
 /**
